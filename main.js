@@ -278,10 +278,9 @@ function createAddForm({ title, client, tbody, removeText }) {
     // if(modalAddClient.classList.contains('active')){
     // } else {
         modalAddClient.addEventListener('click', function(e){
-            const modal = addForm.closest('form')
-            const formDiv = formContainer.closest('div')
+            const modalInner = modalAddClient.closest('div')
             console.log(e.target)
-            if(e.target != (modal && formDiv)){
+            if(e.target === modalInner){
                 modalAddClient.classList.add('active');
             } 
         })
@@ -307,6 +306,15 @@ function createAddForm({ title, client, tbody, removeText }) {
                 addNewContactBtn: addContactBtn
             })
         }
+
+        modalAddClient.addEventListener('click', function(e){
+            const modalInner = modalAddClient.closest('div')
+            console.log(e.target)
+            if(e.target === modalInner){
+                modalAddClient.classList.add('active');
+                modalAddClient.remove(modalAddClient)
+            } 
+        })
 
         addForm.addEventListener('submit', async function (e) {
             e.preventDefault()
@@ -769,6 +777,15 @@ function createDeleteModal(btnDeleteModal) {
 
     close.addEventListener('click', function () {
         modalDeleteWindow.remove(modalDeleteWindow);
+    })
+
+    modalDeleteWindow.addEventListener('click', function(e){
+        const modalInner = modalDeleteWindow.closest('div')
+        console.log(e.target)
+        if(e.target === modalInner){
+            // modalDeleteWindow.classList.add('active');
+            modalDeleteWindow.remove(modalDeleteWindow)
+        } 
     })
 
     deleteWindowBtn.addEventListener('click', async function () {
