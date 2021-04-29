@@ -1,9 +1,15 @@
 // Body
 const container = document.createElement('div')
 container.classList.add('container', 'body_container');
+const tableContainer = document.createElement('div')
+tableContainer.classList.add('container_table')
+
+
 const title = document.createElement('h1');
 title.classList.add('title');
 title.textContent = 'Клиенты';
+container.append(title);
+container.append(tableContainer)
 
 // Оформление Header
 function createHeader() {
@@ -164,8 +170,7 @@ function createTable() {
 
     })
 
-    container.append(title);
-    container.append(table);
+    tableContainer.append(table);
     document.body.append(container)
     return {
         tbody,
@@ -255,6 +260,9 @@ function createAddForm({ title, client, tbody, removeText }) {
     })
 
     const surnameLabel = document.createElement('label')
+    const lableConst = document.createElement('span')
+    lableConst.textContent = '*'
+    lableConst.classList.add('label_last_child')
     inputsurname.placeholder = 'Фамилия*'
     addForm.append(surnameLabel)
     addForm.append(inputsurname);
@@ -268,6 +276,9 @@ function createAddForm({ title, client, tbody, removeText }) {
 
     const lastnameLabel = document.createElement('label')
     inputLastName.placeholder = 'Отчество'
+    const nameLableConst = document.createElement('span')
+    nameLableConst.textContent = '*'
+    nameLableConst.classList.add('label_last_child')
     addForm.append(lastnameLabel);
     addForm.append(inputLastName);
 
@@ -275,25 +286,25 @@ function createAddForm({ title, client, tbody, removeText }) {
     addBtnForm.textContent = 'Сохранить';
     addBtnForm.classList.add('btn_style')
 
-    // if(modalAddClient.classList.contains('active')){
-    // } else {
-        modalAddClient.addEventListener('click', function(e){
-            const modalInner = modalAddClient.closest('div')
-            console.log(e.target)
-            if(e.target === modalInner){
-                modalAddClient.classList.add('active');
-            } 
-        })
-    // }
+    modalAddClient.addEventListener('click', function (e) {
+        const modalInner = modalAddClient.closest('div')
+        console.log(e.target)
+        if (e.target === modalInner) {
+            modalAddClient.classList.add('active');
+        }
+    })
 
-
+    
 
 
     if (client) {
         modalAddClient.classList.toggle('active');
-        surnameLabel.textContent = 'Фамилия*'
-        nameLabel.textContent = 'Имя*'
+        surnameLabel.textContent = 'Фамилия'
+        nameLabel.textContent = 'Имя'
         lastnameLabel.textContent = 'Отчество'
+        lableConst.textContent = '*'
+        surnameLabel.append(lableConst)
+        nameLabel.append(nameLableConst)
 
         inputsurname.value = client.surname;
         inputname.value = client.name;
@@ -307,13 +318,13 @@ function createAddForm({ title, client, tbody, removeText }) {
             })
         }
 
-        modalAddClient.addEventListener('click', function(e){
+        modalAddClient.addEventListener('click', function (e) {
             const modalInner = modalAddClient.closest('div')
             console.log(e.target)
-            if(e.target === modalInner){
+            if (e.target === modalInner) {
                 modalAddClient.classList.add('active');
                 modalAddClient.remove(modalAddClient)
-            } 
+            }
         })
 
         addForm.addEventListener('submit', async function (e) {
@@ -731,7 +742,7 @@ function changerClient(tableItem, arrayClient, tbody) {
             btnChanger.classList.remove('btn_load')
             let objChanger = arrayClient.find(item => item.id == tableItem.firstChild.textContent);
             const newForm = createAddForm({
-                title: 'Изменить данные клиента  ',
+                title: 'Изменить данные  ',
                 client: objChanger,
                 tbody,
                 removeText: 'Удалить клиента'
@@ -758,6 +769,7 @@ function createDeleteModal(btnDeleteModal) {
     deleteWindow.classList.add('delete_container');
     const deleteTitle = document.createElement('h3');
     deleteTitle.textContent = 'Удалить клиента?';
+    deleteTitle.classList.add('delete_title')
 
     const deleteText = document.createElement('p');
     deleteText.textContent = 'Вы действительно хотите удалить данного клиента?';
@@ -779,13 +791,13 @@ function createDeleteModal(btnDeleteModal) {
         modalDeleteWindow.remove(modalDeleteWindow);
     })
 
-    modalDeleteWindow.addEventListener('click', function(e){
+    modalDeleteWindow.addEventListener('click', function (e) {
         const modalInner = modalDeleteWindow.closest('div')
         console.log(e.target)
-        if(e.target === modalInner){
+        if (e.target === modalInner) {
             // modalDeleteWindow.classList.add('active');
             modalDeleteWindow.remove(modalDeleteWindow)
-        } 
+        }
     })
 
     deleteWindowBtn.addEventListener('click', async function () {
@@ -870,9 +882,10 @@ async function render(tbody) {
     }
 }
 
+
 async function renderSort(arrayClient, tbody) {
     clearTimeout(timeout);
-    tbody.append(loadWindow)
+    tableContainer.append(loadWindow)
     timeout = setTimeout(async () => {
         loadWindow.remove(loadWindow)
         for (let obj of arrayClient) {
